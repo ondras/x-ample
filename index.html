@@ -1,34 +1,36 @@
 <!doctype html>
-
 <html>
 	<head>
-		<meta charse="utf-8" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
 		<title>&lt;ex-ample&gt; demo page</title>
-
-		<link rel="stylesheet"
-		      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/github.min.css">
-		<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
-
-		<link rel="stylesheet" href="ex-ample.css" />
-		<script src="ex-ample.js"></script>
-
-		<style>
-			ex-ample { max-width: 400px; }
-		</style>
 	</head>
 	<body>
-		<h1>&lt;ex-ample&gt; demo page</h1>
-		<p>See <a href="https://github.com/ondras/ex-ample">the GitHub repository</a> for more information.</p>
 
-		<h2>Editable HTML box</h2>
-		<ex-ample><a href="#">some <em>link</em></a></ex-ample>
+<script type="application/x-ample">
+yield "hello";
+</script>
 
+<script type="application/x-amplex">
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-		<h2>Editable JS box</h2>
-		<ex-ample language="js">
-let node = document.createElement("marquee");
-node.textContent = "Hello";
-appendChild(node);
-		</ex-ample>
+let num = 1;
+while (true) {
+	yield num++;
+	await sleep(1000);
+}
+</script>
+
+<script type="module">
+import XAmple from "./x-ample.js";
+
+await customElements.whenDefined("x-ample");
+let selector = `script[type="application/x-ample"]`;
+[...document.querySelectorAll(selector)].forEach(script => {
+	let node = XAmple.fromScript(script);
+	script.replaceWith(node);
+});
+</script>
+
 	</body>
 </html>
