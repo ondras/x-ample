@@ -3,7 +3,10 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
-		<title>&lt;ex-ample&gt; demo page</title>
+		<title>&lt;x-ample&gt; demo page</title>
+		<style>
+			x-ample { margin-bottom: 1em; }
+		</style>
 	</head>
 	<body>
 
@@ -11,7 +14,9 @@
 yield "hello";
 </script>
 
-<script type="application/x-amplex">
+
+
+<script type="application/x-ample">
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 let num = 1;
@@ -20,6 +25,8 @@ while (true) {
 	await sleep(1000);
 }
 </script>
+
+
 
 <script type="module">
 import XAmple from "./x-ample.js";
