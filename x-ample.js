@@ -95,12 +95,18 @@ const HTML = `
 	box-sizing: border-box;
 }
 
-textarea, pre {
+[part=textarea], [part=code] {
+	--padding: 2px;
 	font-family: monospace;
 	font-size: inherit;
 	margin: 0;
-	padding: 0;
+	padding: var(--padding);
+	border: none;
 	width: 100%;
+}
+
+[part=textarea] {
+	min-height: calc(3lh + 2*var(--padding));
 }
 
 </style>
