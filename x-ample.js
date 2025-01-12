@@ -15,7 +15,7 @@ export default class ExAmple extends HTMLElement {
 
 	static fromScript(scriptNode) {
 		let example = new this();
-		example.code = scriptNode.textContent.trim();
+		example.code = scriptNode.textContent.replace(/^\s*\n/, "").trimEnd();
 		return example;
 	}
 
@@ -91,15 +91,7 @@ export default class ExAmple extends HTMLElement {
 
 	async tick() {
 		if (this.#pulling || this.#done) { return; }
-		this.#pulling = true;
-
-		let gen = this.#generator;
-		gen.next().then(({value, done}) => {
-			if (gen != this.#generator) { return; }
-			this.#pulling = false;
-			this.#done = done;
-			if (!done) { this.#output.replaceChildren(value); }
-		});
+		this.#pull();
 	}
 
 	#run() {
@@ -114,13 +106,28 @@ export default class ExAmple extends HTMLElement {
 			let func = new AsyncGeneratorFunction(this.#code);
 			this.#generator = func();
 			this.#done = false;
-			this.tick();
+			this.#pull();
 		} catch (e) {
 			this.#generator = undefined;
 			this.#done = true;
 			this.#output.append(e.message);
 		}
+	}
 
+	#pull() {
+		this.#pulling = true;
+		let gen = this.#generator;
+
+		let onPull = (value, done) => {
+			if (gen != this.#generator) { return; }
+			this.#pulling = false;
+			this.#done = done;
+			this.#output.replaceChildren(value);
+		}
+		gen.next().then(
+			({value, done}) => onPull(value, done),
+			e => onPull(e, true)
+		);
 	}
 }
 
@@ -128,7 +135,6 @@ const HTML = `
 <style>
 :host {
 	display: block;
-	background-color: #eee;
 }
 
 * {

@@ -4,18 +4,38 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>&lt;x-ample&gt; demo page</title>
-		<style>
-			x-ample { margin-bottom: 1em; }
-		</style>
+
+		<link rel="stylesheet" href="index.css"	/>
 	</head>
 	<body>
 
+<h1>&lt;x-ample&gt; examples</h1>
+
+<p>Click on the code to edit. Once you blur the textarea, the code becomes live.</p>
+<h2>Simple value-returning code</h2>
 <script type="application/x-ample">
-yield "hello";
+return "hello";
 </script>
 
 
+<h2>HTML output</h2>
+<p>Returned values are shown using the <code>Element.prototype.append</code>.</h2>
+<script type="application/x-ample">
+let canvas = document.createElement("canvas");
+canvas.width = canvas.height = 16;
+let ctx = canvas.getContext("2d");
+ctx.fillStyle = "hotpink";
+ctx.fillRect(0, 0, 16, 16);
+return canvas;
+</script>
 
+
+<h2>Long-running code</h2>
+<p>The code is wrapped inside an asynchronous generator. This means that:</p>
+<ol>
+	<li>It is possible to yield multiple times (every yield replaces the previous value)</li>
+	<li>You can use <code>await</code></li>
+</ol>
 <script type="application/x-ample">
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
@@ -27,11 +47,9 @@ while (true) {
 </script>
 
 
-
 <script type="module">
 import XAmple from "./x-ample.js";
 
-await customElements.whenDefined("x-ample");
 let selector = `script[type="application/x-ample"]`;
 [...document.querySelectorAll(selector)].forEach(script => {
 	let node = XAmple.fromScript(script);

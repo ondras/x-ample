@@ -1,0 +1,13 @@
+body {
+	font-family: sans-serif;
+	background-color: #eee;
+}
+
+x-ample {
+	tab-size: 4;
+	margin-bottom: 1em;
+
+	::part(output) {
+
+	}
+}
