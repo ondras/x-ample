@@ -5,9 +5,16 @@ body {
 
 x-ample {
 	tab-size: 4;
+	margin-top: 0.5em;
 	margin-bottom: 1em;
+	border-left: 2px solid #333;
+	padding-left: 4px;
 
-	::part(output) {
+	&::part(textarea), &::part(code) {
+		background-color: #ddd;
+	}
 
+	&::part(output) {
+		xdisplay: block;
 	}
 }

@@ -1,13 +1,15 @@
 const AsyncGeneratorFunction = (async function*() {}).constructor;
+const HLJS_OPTIONS = {language:"javascript"};
 
 let connectedXamples = new Set();
 
 export default class ExAmple extends HTMLElement {
-	#mode = "run";
+	#mode = "view";
 	#code = "";
 	#generator;
 	#done = false;
 	#pulling = false;
+	#internals = this.attachInternals();
 
 	get #output() { return this.shadowRoot.querySelector("[part=output]");}
 	get #pre() { return this.shadowRoot.querySelector("[part=code]");}
@@ -30,6 +32,11 @@ export default class ExAmple extends HTMLElement {
 		let pre = this.#pre;
 		let textarea = this.#textarea;
 		let code = this.#code;
+		let { states } = this.#internals;
+
+		states.delete("view");
+		states.delete("edit");
+		states.add(mode);
 
 		switch (mode) {
 			case "edit":
@@ -39,10 +46,14 @@ export default class ExAmple extends HTMLElement {
 				textarea.value = code;
 			break;
 
-			case "run":
+			case "view":
 				textarea.hidden = true;
 				pre.hidden = false;
-				pre.textContent = code;
+				if (window.hljs) {
+					pre.innerHTML = hljs.highlight(code, HLJS_OPTIONS).value;
+				} else {
+					pre.textContent = code;
+				}
 				code && this.#run();
 			break;
 		}
@@ -58,8 +69,12 @@ export default class ExAmple extends HTMLElement {
 				this.#textarea.value = code;
 			break;
 
-			case "run":
-				this.#pre.textContent = code;
+			case "view":
+				if (window.hljs) {
+					pre.innerHTML = hljs.highlight(code, HLJS_OPTIONS).value;
+				} else {
+					pre.textContent = code;
+				}
 				code && this.#run();
 			break;
 		}
@@ -69,7 +84,6 @@ export default class ExAmple extends HTMLElement {
 		const { shadowRoot } = this;
 		shadowRoot.innerHTML = HTML;
 
-		this.#pre.textContent = this.#code;
 		this.#pre.addEventListener("click", _ => {
 			this.mode = "edit";
 			this.#textarea.focus();
@@ -77,10 +91,10 @@ export default class ExAmple extends HTMLElement {
 
 		this.#textarea.addEventListener("blur", _ => {
 			this.code = this.#textarea.value;
-			this.mode = "run";
+			this.mode = "view";
 		});
 
-		this.mode = "run";
+		this.mode = "view";
 
 		connectedXamples.add(this);
 	}
@@ -134,7 +148,8 @@ export default class ExAmple extends HTMLElement {
 const HTML = `
 <style>
 :host {
-	display: block;
+	display: flex;
+	flex-direction: column;
 }
 
 * {
@@ -148,7 +163,6 @@ const HTML = `
 	margin: 0;
 	padding: var(--padding);
 	border: none;
-	width: 100%;
 }
 
 [part=textarea] {
