@@ -2,6 +2,7 @@ const AsyncGeneratorFunction = (async function*() {}).constructor;
 const HLJS_OPTIONS = {language:"javascript"};
 
 let connectedXamples = new Set();
+let hljsStylesheet;
 
 export default class ExAmple extends HTMLElement {
 	#mode = "view";
@@ -19,6 +20,11 @@ export default class ExAmple extends HTMLElement {
 		let example = new this();
 		example.code = scriptNode.textContent.replace(/^\s*\n/, "").trimEnd();
 		return example;
+	}
+
+	static replaceScript(scriptNode) {
+		let example = this.fromScript(scriptNode);
+		scriptNode.replaceWith(example);
 	}
 
 	constructor() {
@@ -84,6 +90,8 @@ export default class ExAmple extends HTMLElement {
 		const { shadowRoot } = this;
 		shadowRoot.innerHTML = HTML;
 
+		if (window.hljs) { this.#importHljsStylesheet(); }
+
 		this.#pre.addEventListener("click", _ => {
 			this.mode = "edit";
 			this.#textarea.focus();
@@ -93,6 +101,7 @@ export default class ExAmple extends HTMLElement {
 			this.code = this.#textarea.value;
 			this.mode = "view";
 		});
+
 
 		this.mode = "view";
 
@@ -142,6 +151,24 @@ export default class ExAmple extends HTMLElement {
 			({value, done}) => onPull(value, done),
 			e => onPull(e, true)
 		);
+	}
+
+	#importHljsStylesheet() {
+		if (!hljsStylesheet) {
+			hljsStylesheet = new CSSStyleSheet();
+
+			let original = [...document.styleSheets].find(link => link.href.includes("highlight.js"));
+			if (!original) { return; }
+
+			try {
+				[...original.cssRules].forEach(rule => hljsStylesheet.insertRule(rule.cssText));
+			} catch (e) {
+				console.warn(e);
+				console.warn("hljs stylesheet probably missing the crossorigin attribute");
+			}
+		}
+
+		this.shadowRoot.adoptedStyleSheets.push(hljsStylesheet);
 	}
 }
 
