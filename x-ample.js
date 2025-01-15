@@ -4,7 +4,7 @@ const HLJS_OPTIONS = {language:"javascript"};
 let connectedXamples = new Set();
 let hljsStylesheet;
 
-export default class ExAmple extends HTMLElement {
+export default class XAmple extends HTMLElement {
 	#mode = "view";
 	#code = "";
 	#generator;

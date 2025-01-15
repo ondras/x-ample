@@ -17,8 +17,4 @@ x-ample {
 	&::part(textarea), &::part(code) {
 		background-color: #ddd;
 	}
-
-	&::part(output) {
-		xdisplay: block;
-	}
 }
