@@ -203,7 +203,7 @@ const HTML = `
 <textarea part="textarea"></textarea>
 `;
 
-customElements.define("x-ample", ExAmple);
+customElements.define("x-ample", XAmple);
 
 function tick() {
 	connectedXamples.forEach(xample => xample.tick());
