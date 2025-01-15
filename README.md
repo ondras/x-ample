@@ -14,7 +14,7 @@ The `<x-ample>` can be used in different ways. This makes the installation proce
       - Wait for the CustomElement registration: `let XAmple = await customElements.whenDefined("x-ample")`
       - JS module import: `import XAmple from "$URL"`
 
-## JS instantialization API
+## JS instantiation API
 
 While it is possible to simply create the HTML (via `<x-ample></x-ample>` tags), you often want to initialize the example with an existing source code. First, define your source code as a script with a custom type:
 
