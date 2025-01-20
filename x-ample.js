@@ -194,8 +194,8 @@ const HTML = `
 
 [part=textarea] {
 	min-height: calc(3lh + 2*var(--padding));
+	line-height: inherit;
 }
-
 </style>
 
 <output part="output"></output>
