@@ -86,12 +86,23 @@ x-ample::part(output) {
 ## Syntax highlighting
 
 Your code samples are colorized via [highlight.js](https://highlightjs.org/) when present. Pick any distribution/styling that is appropriate. Using highlight.js styles inside Shadow DOM is tricky; you need to
-  1. make sure your highlight.js's CSS file has `highlight.js` somewhere in its URL,
-  1. add the `crossorigin` attribute to the CSS stylesheet element
+  1. create a local `CSSStyleSheet`
+  1. adopt it inside the &lt;x-ample&gt; via its `adoptStyleSheet` method
+
+Example:
 
 ```html
 <link rel="stylesheet" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+<script>
+let hljsStylesheet = new CSSStyleSheet();
+let original = document.querySelector("link[crossorigin]");
+[...original.sheet.cssRules].forEach(rule => hljsStylesheet.insertRule(rule.cssText));
+
+let example = document.createElement("x-ample");
+example.adoptStyleSheet(hljsStylesheet);
+</script>
 ```
 
 ## Demo page
