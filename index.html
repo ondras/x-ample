@@ -52,8 +52,15 @@ while (true) {
 <script type="module">
 import XAmple from "./x-ample.js";
 
+let hljsStylesheet = new CSSStyleSheet();
+let original = document.querySelector("link[crossorigin]");
+[...original.sheet.cssRules].forEach(rule => hljsStylesheet.insertRule(rule.cssText));
+
 let selector = `script[type="application/x-ample"]`;
-[...document.querySelectorAll(selector)].forEach(script => XAmple.replaceScript(script));
+[...document.querySelectorAll(selector)].forEach(script => {
+	let xample = XAmple.replaceScript(script);
+	xample.adoptStyleSheet(hljsStylesheet);
+});
 </script>
 
 	</body>
