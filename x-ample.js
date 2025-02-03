@@ -147,7 +147,11 @@ export default class XAmple extends HTMLElement {
 			if (gen != this.#generator) { return; }
 			this.#pulling = false;
 			this.#done = done;
-			this.#output.replaceChildren(value);
+			if (value instanceof Array) {
+				this.#output.replaceChildren(...value);
+			} else {
+				this.#output.replaceChildren(value);
+			}
 		}
 		gen.next().then(
 			({value, done}) => onPull(value, done),

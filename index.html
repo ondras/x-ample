@@ -32,6 +32,14 @@ return canvas;
 </script>
 
 
+<h2>Multiple values</h2>
+<p>Returned array is spread out as individual arguments to <code>Element.prototype.append</code>.</p>
+
+<script type="application/x-ample">
+return ["d ", document.createElement("input"), " b"];
+</script>
+
+
 <h2>Long-running code</h2>
 <p>The code is wrapped inside an asynchronous generator. This means that:</p>
 <ol>
